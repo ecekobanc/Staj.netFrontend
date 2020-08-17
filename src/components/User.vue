@@ -1,6 +1,19 @@
 <template>
   <div class="hello">
     <h1>Welcome {{ username }}</h1>
+    <br/><br/>
+    <label v-if="!isVisible" id="baskaId">Your birthdate is: </label>
+    <label id="birthdateLabel">{{ birth }}</label>
+    <br/><br/>
+    <div v-if="isVisible" style="font-size:30px;"> 
+      <a :href="githubAddress">GitHub</a>
+      <br/><br/>
+      <a :href="linkedinAddress">Linkedin</a>
+      <br/><br/>
+      <a :href="twitterAddress">Twitter</a>
+      <br/><br/>
+      <button @click="birthdate" >Birthdate</button>
+    </div>
   </div>
 </template>
 
@@ -11,7 +24,13 @@ export default {
   name: 'User',
   data() {
     return {
-      username: ''
+      username: '',
+      githubAddress: '',
+      linkedinAddress: '',
+      twitterAddress: '',
+      birth: '',
+      data: {},
+      isVisible: true
     }
   },
   async mounted() {
@@ -19,17 +38,43 @@ export default {
   
     try{
       let res = await axios.get("http://localhost:8080/user/" + this.username);
+
+      this.data = res.data;
+
+      res.data.socials.forEach((item, index) => {
+        if(item.type === "GITHUB"){
+          this.githubAddress = res.data.socials[index].address;
+        }
+        else if(item.type === "LINKEDIN"){
+          this.linkedinAddress = res.data.socials[index].address;
+        }
+        else if(item.type === "TWITTER"){
+          this.twitterAddress = res.data.socials[index].address;
+        }
+      });
       console.log(res);
     }
     catch(error){
-      console.log(error.response);
+      console.log(error);
     }
   },
   methods: {
+    birthdate() {
+      this.birth = this.data.birthdate;
+      this.isVisible = false;
+    }
   }
 }
 </script>
 
 <style scoped>
+
+#baskaId{
+  color: yellow;
+}
+
+#birthdateLabel{
+  color: darkblue;
+}
 
 </style>

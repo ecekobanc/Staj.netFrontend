@@ -43,12 +43,12 @@ export default {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*"
       }
+
       try{
-        let a = await axios.post("http://localhost:8080/auth/login", user, headers);
-        this.responseMessage = "Welcome " + a.data.username;
-        axios.defaults.headers.common['Authorization'] = "Bearer " + a.data.authenticationToken;
-        console.log(axios.defaults.headers.common);
-        //this.$router.push("/user/" + a.data.username);
+        let response = await axios.post("http://localhost:8080/auth/login", user, headers);
+        this.responseMessage = "Welcome " + response.data.username;
+        axios.defaults.headers.common['Authorization'] = "Bearer " + response.data.authenticationToken;
+        this.$router.push("/user/" + response.data.username);
       }
       catch(error){
         this.responseMessage = error.response.data.message;
