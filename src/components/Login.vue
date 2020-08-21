@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api';
+import VueCookie from 'vue-cookies';
 
 export default {
   name: 'Login',
@@ -39,15 +40,10 @@ export default {
         "password" : this.password
       };
 
-      let headers = {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      }
-
       try{
-        let response = await axios.post("http://localhost:8080/auth/login", user, headers);
+        let response = await api.login(user);
+        VueCookie.set('access_token', response.data.authenticationToken);
         this.responseMessage = "Welcome " + response.data.username;
-        axios.defaults.headers.common['Authorization'] = "Bearer " + response.data.authenticationToken;
         this.$router.push("/user/" + response.data.username);
       }
       catch(error){

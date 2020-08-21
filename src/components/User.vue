@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api.js';
 
 export default {
   name: 'User',
@@ -37,7 +37,7 @@ export default {
     this.username = this.$route.params.username;
   
     try{
-      let res = await axios.get("http://localhost:8080/user/" + this.username);
+      let res = await api.getUser(this.username);
 
       this.data = res.data;
 
@@ -52,10 +52,10 @@ export default {
           this.twitterAddress = res.data.socials[index].address;
         }
       });
-      console.log(res);
     }
     catch(error){
-      console.log(error);
+      console.log(error.response.data.message);
+      this.username = undefined;
     }
   },
   methods: {

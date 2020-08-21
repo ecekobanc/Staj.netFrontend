@@ -13,6 +13,7 @@
     "save": "^2.4.0",
     "schema-utils": "^2.7.0",
     "vue": "^2.6.11",
+    "vue-cookies": "^1.7.3",
     "vue-router": "^3.4.3"
   },
   "devDependencies": {
